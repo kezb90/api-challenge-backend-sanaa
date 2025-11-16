@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     # Trust App
     "rest_framework",
     "corsheaders",
+    'drf_yasg',
+    'django_filters',
+
     # My Apps
     "accounts",
     "rbac",
@@ -156,4 +159,15 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=300),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
     "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': "JWT Authorization header. Example: Bearer <token>"
+        }
+    }
 }
