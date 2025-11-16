@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Trust App
     "rest_framework",
-    "corsheaders"
+    "corsheaders",
     # My Apps
-    "apps.AccountsConfig.accounts",
+    "accounts",
 
 ]
+
+AUTH_USER_MODEL = 'accounts.User'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
