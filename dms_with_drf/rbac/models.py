@@ -16,3 +16,10 @@ class Role(models.Model):
     
     def __str__(self):
         return self.name
+
+class RolePermission(models.Model):
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    codename = models.CharField(max_length=100)  #"can_upload_document"
+    
+    class Meta:
+        unique_together = ('role', 'codename')
