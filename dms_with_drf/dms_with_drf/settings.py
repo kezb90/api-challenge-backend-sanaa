@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     # Trust App
     "rest_framework",
     "corsheaders"
+    # My Apps
+    "apps.AccountsConfig.accounts",
 
 ]
 
