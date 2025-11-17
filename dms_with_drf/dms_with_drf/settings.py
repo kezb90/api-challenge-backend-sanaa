@@ -1,7 +1,21 @@
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+if os.getenv("DOCKER_ENV") != "true":
+    try:
+        from .local_settings import *
+    except ImportError:
+        pass
+else:
+    print("Running inside Docker, ignoring local_settings.py")
+
+
+SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
 # Application definition
 
@@ -62,13 +76,23 @@ WSGI_APPLICATION = "dms_with_drf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("DMS_DB"),
+#         "USER": os.getenv("POSTGRES_USER"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+#         "HOST": os.getenv("POSTGRES_DB", "db"),
+#         "PORT": os.getenv("POSTGRES_PORT", "5432"),
+#     }
+# }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -121,6 +145,21 @@ REST_FRAMEWORK = {
     
 }
 
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+AWS_ACCESS_KEY_ID = os.getenv("MINIO_ACCESS_KEY")
+AWS_SECRET_ACCESS_KEY = os.getenv("MINIO_SECRET_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("MINIO_BUCKET")
+AWS_S3_ENDPOINT_URL = os.getenv("MINIO_ENDPOINT")
+AWS_S3_REGION_NAME = "us-east-1"
+AWS_S3_SIGNATURE_VERSION = "s3v4"
+AWS_S3_ADDRESSING_STYLE = "path"
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -131,4 +170,22 @@ SWAGGER_SETTINGS = {
             'description': "JWT Authorization header. Example: Bearer <token>"
         }
     }
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        }
+    }
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=int(os.getenv("JWT_LIFETIME", "120"))),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=int(os.getenv("JWT_REFRESH", "30"))),
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
