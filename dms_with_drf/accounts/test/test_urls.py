@@ -32,16 +32,16 @@ class UrlsTest(TestCase):
         """تست وجود تمام URLهای مورد نیاز"""
         # لیست کاربران
         url = reverse('user-list')
-        self.assertEqual(url, '/api/users/')
+        self.assertEqual(url, '/accounts/api/users/')
         
-        # جزئیات کاربر
+        # # جزئیات کاربر
         url = reverse('user-detail', args=[1])
-        self.assertEqual(url, '/api/users/1/')
+        self.assertEqual(url, '/accounts/api/users/1/')
         
         # دریافت توکن
         url = reverse('token_obtain_pair')
-        self.assertEqual(url, '/api/token/')
+        self.assertEqual(url, '/accounts/api/token/')
         
         # رفرش توکن
         url = reverse('token_refresh')
-        self.assertEqual(url, '/api/token/refresh/')
+        self.assertEqual(url, '/accounts/api/token/refresh/')
