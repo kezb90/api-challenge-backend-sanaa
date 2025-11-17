@@ -12,7 +12,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && rm -rf /var/lib/apt/lists/*
 
 # نصب پکیج‌های پایتون
-COPY ../requirements.txt /tmp/
+COPY requirements.txt /tmp/
 RUN pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     rm -rf /tmp/requirements.txt
