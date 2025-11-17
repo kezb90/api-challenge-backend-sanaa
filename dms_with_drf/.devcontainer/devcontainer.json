@@ -1,0 +1,32 @@
+{
+  "name": "Django + PostgreSQL + Redis + MinIO (Full Docker)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "postCreateCommand": [
+    "bash",
+    "-c",
+    "create-minio-bucket.sh || true && pip install -r requirements.txt"
+  ],
+  "forwardPorts": [8000, 5432, 6379, 9000, 9001],
+  "portsAttributes": {
+    "8000": { "label": "Django", "onAutoForward": "notify" },
+    "9000": { "label": "MinIO API" },
+    "9001": { "label": "MinIO Console" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.black-formatter",
+        "batisteo.vscode-django",
+        "wholroyd.jinja",
+        "kevinrose.vsc-python-indent"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}
