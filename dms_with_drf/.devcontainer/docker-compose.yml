@@ -12,11 +12,12 @@ services:
     environment:
       - DOCKER_ENV=true
       - DJANGO_DEBUG=True
-      - SECRET_KEY=very-secret-key-for-codespaces-only
-      - ALLOWED_HOSTS=*
+      - SECRET_KEY=django-insecure-very-secret-key-for-codespaces-only-do-not-use-in-prod
+      - ALLOWED_HOSTS=*,localhost,127.0.0.1
       - DMS_DB=postgres
+      - POSTGRES_HOST=db
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - PPOSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
       - POSTGRES_PORT=5432
       - MINIO_ACCESS_KEY=minioadmin
