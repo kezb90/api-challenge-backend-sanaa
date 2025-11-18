@@ -11,6 +11,11 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# نصب MinIO Client (mc)
+RUN curl -O https://dl.min.io/client/mc/release/linux-amd64/mc \
+    && chmod +x mc \
+    && mv mc /usr/local/bin/mc
+
 # نصب پکیج‌های پایتون
 COPY requirements.txt /tmp/
 RUN pip install --upgrade pip && \

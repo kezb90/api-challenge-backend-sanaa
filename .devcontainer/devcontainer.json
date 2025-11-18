@@ -3,20 +3,23 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
+
   "features": {
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
-  "postCreateCommand": [
-    "bash",
-    "-c",
-    "create-minio-bucket.sh || true && pip install -r requirements.txt"
-  ],
+
+  "postCreateCommand": "bash -c 'pip install -r requirements.txt || true'",
+
+  "postStartCommand": "bash -c 'cd dms_with_drf && python manage.py migrate || true && create-minio-bucket.sh || true'",
+
   "forwardPorts": [8000, 5432, 6379, 9000, 9001],
+
   "portsAttributes": {
     "8000": { "label": "Django", "onAutoForward": "notify" },
     "9000": { "label": "MinIO API" },
     "9001": { "label": "MinIO Console" }
   },
+
   "customizations": {
     "vscode": {
       "extensions": [
@@ -28,5 +31,6 @@
       ]
     }
   },
+
   "remoteUser": "vscode"
 }
