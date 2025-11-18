@@ -6,6 +6,28 @@
 
 ## 🚀 راه‌اندازی پروژه
 
+
+
+برای اجرای پروژه با Docker، مراحل زیر را انجام دهید:
+
+### 1. ساخت DevContainer
+
+اگر از VSCode و DevContainer استفاده می‌کنید، کافی است DevContainer را باز کنید:
+
+- فایل `.devcontainer/docker-compose.yml` و `.devcontainer/Dockerfile` تمام وابستگی‌ها را مدیریت می‌کنند.
+- `mc` (MinIO Client) به صورت خودکار نصب می‌شود.
+- با اجرای `postStartCommand`:
+  - دیتابیس مهاجرت می‌شود (`migrate`)
+  - باکت MinIO ساخته می‌شود.
+
+### 2. اجرای Docker Compose دستی (در صورت نیاز)
+
+```bash
+docker-compose up -d --build
+
+docker-compose exec app bash
+
+
 ابتدا وارد پوشه پروژه شوید:
 
 ```bash
