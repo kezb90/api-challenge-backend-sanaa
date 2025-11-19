@@ -1,31 +1,33 @@
-from rest_framework import permissions
+# document/permissions.py
+from rest_framework.permissions import BasePermission
 
-class DocumentPermission(permissions.BasePermission):
+class DocumentPermission(BasePermission):
     """
-    Roles:
-    - viewer: can read only
-    - editor: can upload and update, but cannot delete
-    - admin: full access
+    Uses Django's permissions:
+    - view_document
+    - add_document
+    - change_document
+    - delete_document
     """
 
     def has_permission(self, request, view):
         user = request.user
-        
+
         if not user.is_authenticated:
             return False
 
-        role = user.role  # from User model property
+        method = request.method
 
-        if request.method in permissions.SAFE_METHODS:
-            return True  # GET, HEAD, OPTIONS
+        if method in ("GET", "HEAD", "OPTIONS"):
+            return user.has_perm("document.view_document")
 
-        if request.method == "POST":
-            return role in ["editor", "admin"]
+        if method == "POST":
+            return user.has_perm("document.add_document")
 
-        if request.method in ["PUT", "PATCH"]:
-            return role in ["editor", "admin"]
+        if method in ("PUT", "PATCH"):
+            return user.has_perm("document.change_document")
 
-        if request.method == "DELETE":
-            return role == "admin"
+        if method == "DELETE":
+            return user.has_perm("document.delete_document")
 
         return False
