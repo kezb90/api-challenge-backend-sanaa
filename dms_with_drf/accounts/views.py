@@ -20,9 +20,14 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        
-        # خروجی درست: اطلاعات کاربر + پیام
+
         return Response({
             "detail": "کاربر با موفقیت ایجاد شد",
             "user": UserSerializer(user).data
         }, status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs):
+        return Response({"detail": "تغییر کاربر از این endpoint مجاز نیست"}, status=403)
+
+    def partial_update(self, request, *args, **kwargs):
+        return Response({"detail": "تغییر کاربر از این endpoint مجاز نیست"}, status=403)
